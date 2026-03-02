@@ -109,3 +109,38 @@ class when_user_deletes_a_new_task: XCTestCase {
         Springboard.deleteApp()
     }
 }
+
+class when_user_marks_task_as_favorite: XCTestCase {
+    
+    private var app: XCUIApplication!
+    
+    override func setUp() {
+        app = XCUIApplication()
+        continueAfterFailure = false
+        app.launch()
+        
+        let titleTextField = app.textFields["titleTextField"]
+        titleTextField.tap()
+        titleTextField.typeText("Mow the lawn")
+        
+        let saveTaskButton = app.buttons["saveTaskButton"]
+        saveTaskButton.tap()
+        if app.keyboards.buttons["Done"].exists {
+            app.keyboards.buttons["Done"].tap()
+        } else if app.keyboards.buttons["Return"].exists {
+            app.keyboards.buttons["Return"].tap()
+        }
+    }
+    
+    func test_should_display_updated_task_on_screen_as_favorite() {
+        app.tables["taskList"].cells["Mow the lawn, Medium"].tap()
+        app.images["favoriteImage"].tap()
+        app.buttons["closeButton"].tap()
+        
+        XCTAssertTrue(app.tables["taskList"].cells["Mow the lawn, Love, Medium"].exists)
+    }
+    
+    override class func tearDown() {
+        Springboard.deleteApp()
+    }
+}

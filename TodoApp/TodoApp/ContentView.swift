@@ -113,6 +113,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                .listStyle(.plain)
                 .accessibilityIdentifier("taskList")
                 
                 Spacer()
