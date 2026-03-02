@@ -18,6 +18,10 @@ final class TodoAppEndToEndTests: XCTestCase {
         let taskList = app.tables["taskList"]
         XCTAssertEqual(0, taskList.cells.count)
     }
+    
+    override class func tearDown() {
+        Springboard.deleteApp()
+    }
 }
 
 class when_user_saves_a_new_task: XCTestCase {
@@ -37,5 +41,9 @@ class when_user_saves_a_new_task: XCTestCase {
         
         let taskList = app.tables["taskList"]
         XCTAssertEqual(1, taskList.cells.count)
+    }
+    
+    override class func tearDown() {
+        Springboard.deleteApp()
     }
 }
