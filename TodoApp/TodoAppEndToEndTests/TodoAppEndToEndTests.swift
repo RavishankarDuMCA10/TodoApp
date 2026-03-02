@@ -72,3 +72,40 @@ class when_user_saves_a_new_task: XCTestCase {
         Springboard.deleteApp()
     }
 }
+
+class when_user_deletes_a_new_task: XCTestCase {
+    
+    private var app: XCUIApplication!
+    
+    override func setUp() {
+        app = XCUIApplication()
+        continueAfterFailure = false
+        app.launch()
+        
+        let titleTextField = app.textFields["titleTextField"]
+        titleTextField.tap()
+        titleTextField.typeText("Mow the lawn")
+        
+        let saveTaskButton = app.buttons["saveTaskButton"]
+        saveTaskButton.tap()
+        if app.keyboards.buttons["Done"].exists {
+            app.keyboards.buttons["Done"].tap()
+        } else if app.keyboards.buttons["Return"].exists {
+            app.keyboards.buttons["Return"].tap()
+        }
+    }
+    
+    func test_should_delete_task_successfully() {
+        
+        let taskList = app.tables["taskList"]
+        let cell = taskList.cells.containing(.staticText, identifier: "Mow the lawn, Medium").firstMatch
+        XCTAssertTrue(cell.exists)
+        cell.swipeLeft()
+        taskList.buttons["Delete"].tap()
+        XCTAssertFalse(cell.exists)
+    }
+    
+    override class func tearDown() {
+        Springboard.deleteApp()
+    }
+}
